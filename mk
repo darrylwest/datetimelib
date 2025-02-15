@@ -11,6 +11,7 @@ export project=datetimelib
 case `uname -s` in
     Darwin)
         export CXX=$(brew --prefix gcc)/bin/g++-14
+        echo "compiler: $CXX"
     ;;
 esac
 
@@ -27,6 +28,7 @@ do
         ;;
         build)
             clear
+            echo "compiler: $CXX"
 
             # remove any old unit test
             # /bin/rm -f $root/build/unit
