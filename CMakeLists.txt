@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.22)
 project(datetimelib VERSION 1.0 LANGUAGES CXX)
 
 # Set C++20 standard
