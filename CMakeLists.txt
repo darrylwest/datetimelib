@@ -13,7 +13,6 @@ set(SOURCES
 
 # Header files (for installation and IDEs)
 set(HEADERS
-    include/datetimelib/types.hpp
     include/datetimelib/datetimelib.hpp
 )
 

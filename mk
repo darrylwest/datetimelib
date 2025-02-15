@@ -11,7 +11,6 @@ export project=datetimelib
 case `uname -s` in
     Darwin)
         export CXX=$(brew --prefix gcc)/bin/g++-14
-        echo "compiler: $CXX"
     ;;
 esac
 
@@ -47,6 +46,11 @@ do
         format)
             clang-format -i include/app/*.hpp src/*.cpp
             git status -s
+
+            shift
+        ;;
+        single)
+            python scripts/merge_to_header_only.py
 
             shift
         ;;
