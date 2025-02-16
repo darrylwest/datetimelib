@@ -8,12 +8,6 @@ set -eu
 
 export project=datetimelib
 
-case `uname -s` in
-    Darwin)
-        export CXX=$(brew --prefix gcc)/bin/g++-14
-    ;;
-esac
-
 # parse the cli
 while [[ $# -gt 0 ]]
 do
