@@ -3,4 +3,5 @@ I have a small c++20 library project with a single header: ./include/datetimelib
 sites:
 * https://zzzcode.ai/cplusplus/code-generator (bad)
 * https://writingmate.ai/free-tools/ai-code-generator (bad)
-* https://syntha.ai/code-generators/cpp
+* https://syntha.ai/code-generators/cpp (bad)
+* https://app.codegpt.co/en/marketplace/agents/agent-1f450813 (better, at least there is chat capability)

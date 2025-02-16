@@ -9,6 +9,10 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <string>
+#include <chrono>
+#include <iomanip>
+#include <sstream>
 
 namespace datetimelib {
 

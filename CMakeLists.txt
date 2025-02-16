@@ -1,71 +1,101 @@
-cmake_minimum_required(VERSION 3.22)
-project(datetimelib VERSION 1.0 LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.20)
+project(datetimelib VERSION 1.0.0 LANGUAGES CXX)
 
-# Set C++20 standard
+# Specify C++20 standard
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Source files for the library
+# Enable position independent code for shared libraries
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+# Add compiler flags for stringstream and time functions
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    add_compile_options(-D_GLIBCXX_USE_CXX11_ABI=1)
+endif()
+
+# Add library source files
 set(SOURCES
     src/datetimelib.cpp
 )
 
-# Header files (for installation and IDEs)
+# Add library headers
 set(HEADERS
     include/datetimelib/datetimelib.hpp
 )
 
-# Create static and shared libraries
-add_library(datetimelib_static STATIC ${SOURCES})
-add_library(datetimelib_shared SHARED ${SOURCES})
-
-# Set include directories
-# Set include directories properly for build and install
-target_include_directories(datetimelib_static PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
+# Create shared library
+add_library(${PROJECT_NAME}_shared SHARED ${SOURCES} ${HEADERS})
+target_compile_definitions(${PROJECT_NAME}_shared PRIVATE
+    _GLIBCXX_USE_CXX11_ABI=1
 )
 
-target_include_directories(datetimelib_shared PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
+# Create static library
+add_library(${PROJECT_NAME}_static STATIC ${SOURCES} ${HEADERS})
+target_compile_definitions(${PROJECT_NAME}_static PRIVATE
+    _GLIBCXX_USE_CXX11_ABI=1
 )
 
+# Set properties for both libraries
+foreach(target ${PROJECT_NAME}_shared ${PROJECT_NAME}_static)
+    target_include_directories(${target}
+        PUBLIC
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+            $<INSTALL_INTERFACE:include>
+    )
+endforeach()
 
-# Define output names
-set_target_properties(datetimelib_static PROPERTIES OUTPUT_NAME datetimelib)
-set_target_properties(datetimelib_shared PROPERTIES OUTPUT_NAME datetimelib)
-
-# Installation rules
-install(TARGETS datetimelib_static datetimelib_shared
-    EXPORT datetimelibTargets  # Ensure targets are registered for export
-    ARCHIVE DESTINATION lib
-    LIBRARY DESTINATION lib
-    RUNTIME DESTINATION bin
+# Set output names
+set_target_properties(${PROJECT_NAME}_shared PROPERTIES
+    OUTPUT_NAME ${PROJECT_NAME}
+    VERSION ${PROJECT_VERSION}
+    SOVERSION ${PROJECT_VERSION_MAJOR}
 )
 
-# Install header files
-install(FILES ${HEADERS} DESTINATION include/datetimelib)
+set_target_properties(${PROJECT_NAME}_static PROPERTIES
+    OUTPUT_NAME ${PROJECT_NAME}
+)
 
-# Export package for other CMake projects
+# Install targets
+include(GNUInstallDirs)
+
+install(TARGETS ${PROJECT_NAME}_shared ${PROJECT_NAME}_static
+    EXPORT ${PROJECT_NAME}Targets
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
+
+install(FILES ${HEADERS}
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+)
+
+# Export targets
+install(EXPORT ${PROJECT_NAME}Targets
+    FILE ${PROJECT_NAME}Targets.cmake
+    NAMESPACE ${PROJECT_NAME}::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+)
+
+# Create and install config file
 include(CMakePackageConfigHelpers)
-
-set(CONFIG_INSTALL_DIR lib/cmake/datetimelib)
-
-install(EXPORT datetimelibTargets
-    FILE datetimelibTargets.cmake
-    NAMESPACE datetimelib::
-    DESTINATION ${CONFIG_INSTALL_DIR}
-)
-
 configure_package_config_file(
-    cmake/datetimelibConfig.cmake.in
-    ${CMAKE_CURRENT_BINARY_DIR}/datetimelibConfig.cmake
-    INSTALL_DESTINATION ${CONFIG_INSTALL_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 )
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/datetimelibConfig.cmake
-    DESTINATION ${CONFIG_INSTALL_DIR}
+# Generate version file
+write_basic_package_version_file(
+    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY SameMajorVersion
 )
 
+# Install config files
+install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+)
