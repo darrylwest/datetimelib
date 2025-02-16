@@ -12,7 +12,7 @@
 
 namespace datetimelib {
     // return the version
-    Str get_version() {
+    StrView get_version() {
         return VERSION;
     }
 

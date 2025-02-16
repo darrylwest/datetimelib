@@ -24,10 +24,10 @@ namespace datetimelib {
     // Type alias for a function that provides the current time
     using TimeProvider = std::function<std::chrono::system_clock::time_point()>;
 
-    constexpr Str VERSION = "0.5.1-122";
+    constexpr StrView VERSION = "0.5.1-123";
 
     // return the lib's version
-    Str get_version();
+    StrView get_version();
 
     // unix timestamp
     unsigned int timestamp_seconds();
