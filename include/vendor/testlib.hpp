@@ -29,7 +29,7 @@ namespace rcstestlib {
         // show the results
         friend std::ostream& operator<<(std::ostream& os, const Results v) {
             auto msg = (v.failed == 0) ? green + ", Ok" : red + ", Tests failed!";
-            os << "\t" << v.name << ": tests=" << v.tests << ", passed=" << v.passed
+            os << v.name << ": tests=" << v.tests << ", passed=" << v.passed
                << ", failed=" << v.failed << ", skipped=" << v.skipped << msg << reset;
             return os;
         }

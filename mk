@@ -32,7 +32,7 @@ do
         ;;
         unit)
             (cd build && make -j4 && ctest --output-on-failure)
-            # ./build/unit
+            ./build/unit
 
             shift
         ;;
