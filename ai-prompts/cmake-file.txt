@@ -1,0 +1,6 @@
+I have a small c++20 library project with a single header: ./include/datetimelib/datetimelib.hpp and single source: ./src/datetimelib.cpp ; can you create a CMakeLists.txt file (cmake minimum version 3.20) to enable compiling on apple x86, apple arm, and linux ubuntu ?  i'm using <chrono> with std::localtime and std::put_time.  I need both static and shared libraries.
+
+sites:
+* https://zzzcode.ai/cplusplus/code-generator (bad)
+* https://writingmate.ai/free-tools/ai-code-generator (bad)
+* https://syntha.ai/code-generators/cpp
