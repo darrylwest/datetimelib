@@ -1,6 +1,17 @@
 cmake_minimum_required(VERSION 3.20)
 project(datetimelib VERSION 1.0.0 LANGUAGES CXX)
 
+# Include FetchContent for downloading dependencies
+include(FetchContent)
+
+# Fetch spdlog
+FetchContent_Declare(
+    spdlog
+    GIT_REPOSITORY https://github.com/gabime/spdlog.git
+    GIT_TAG v1.12.0  # Specify a version tag
+)
+FetchContent_MakeAvailable(spdlog)
+
 # Specify C++20 standard
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -9,9 +20,21 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Enable position independent code for shared libraries
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-# Add compiler flags for stringstream and time functions
+# Platform-specific compiler flags
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     add_compile_options(-D_GLIBCXX_USE_CXX11_ABI=1)
+    
+    if(APPLE)
+        # Add system include paths for macOS
+        include_directories(SYSTEM
+            /usr/local/include
+            /usr/include
+            /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include
+        )
+        
+        # Force include cstdio before other system headers
+        add_compile_options(-include cstdio)
+    endif()
 endif()
 
 # Add library source files
@@ -43,6 +66,15 @@ foreach(target ${PROJECT_NAME}_shared ${PROJECT_NAME}_static)
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
             $<INSTALL_INTERFACE:include>
     )
+    
+    if(APPLE)
+        # Add system include paths for each target
+        target_include_directories(${target} SYSTEM PRIVATE
+            /usr/local/include
+            /usr/include
+            /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include
+        )
+    endif()
 endforeach()
 
 # Set output names
@@ -56,7 +88,19 @@ set_target_properties(${PROJECT_NAME}_static PROPERTIES
     OUTPUT_NAME ${PROJECT_NAME}
 )
 
-# Install targets
+# Add unit test executable
+add_executable(unit_tests src/unit.cpp)
+target_link_libraries(unit_tests
+    PRIVATE
+        ${PROJECT_NAME}_static  # Link against the static library
+        spdlog::spdlog         # Link against spdlog
+)
+
+# Enable testing
+enable_testing()
+add_test(NAME unit_tests COMMAND unit_tests)
+
+# Installation commands
 include(GNUInstallDirs)
 
 install(TARGETS ${PROJECT_NAME}_shared ${PROJECT_NAME}_static

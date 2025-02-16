@@ -6,6 +6,7 @@
 
 #include <ansi_colors.hpp>
 #include <iostream>
+#include <sstream>
 
 namespace rcstestlib {
 

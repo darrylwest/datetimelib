@@ -5,3 +5,4 @@
 .DS_Store
 .ssh/*.pem
 logs/*.log
+Testing
