@@ -24,6 +24,10 @@ namespace datetimelib {
     // Type alias for a function that provides the current time
     using TimeProvider = std::function<std::chrono::system_clock::time_point()>;
 
+    constexpr Str VERSION = "0.5.1-122";
+
+    // return the lib's version
+    Str get_version();
 
     // unix timestamp
     unsigned int timestamp_seconds();
@@ -42,6 +46,8 @@ namespace datetimelib {
 
     // add wait delay
     std::chrono::system_clock::time_point get_current_time();
+
+    // Function to wait for the next 5-minute interval with a tolerance of +20 seconds
     void wait_for_next_interval(const TimeProvider& get_now = get_current_time);
     
 }  // namespace datetimelib

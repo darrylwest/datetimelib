@@ -23,7 +23,7 @@ do
             clear
 
             # remove any old unit test
-            # /bin/rm -f $root/build/unit
+            /bin/rm -f build/unit
 
             # cmake --build build/ 
             (cd build && time make -j4 || exit 1)
@@ -32,7 +32,7 @@ do
         ;;
         unit)
             (cd build && make -j4)
-            $root/build/unit
+            ./build/unit
 
             shift
         ;;

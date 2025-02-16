@@ -11,6 +11,11 @@
 #include <functional>
 
 namespace datetimelib {
+    // return the version
+    Str get_version() {
+        return VERSION;
+    }
+
     // unix timestamp
     unsigned int timestamp_seconds() {
         using namespace std::chrono;
@@ -67,7 +72,7 @@ namespace datetimelib {
         return std::chrono::system_clock::now();
     }
 
-    // Function to wait for the next 5-minute interval
+    // Function to wait for the next 5-minute interval with a tolerance of +20 seconds
     void wait_for_next_interval(const TimeProvider& get_now) {
         using namespace std::chrono;
 
