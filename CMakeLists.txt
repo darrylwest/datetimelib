@@ -89,8 +89,8 @@ set_target_properties(${PROJECT_NAME}_static PROPERTIES
 )
 
 # Add unit test executable
-add_executable(unit_tests src/unit.cpp)
-target_link_libraries(unit_tests
+add_executable(unit src/unit.cpp)
+target_link_libraries(unit
     PRIVATE
         ${PROJECT_NAME}_static  # Link against the static library
         spdlog::spdlog         # Link against spdlog
@@ -98,7 +98,7 @@ target_link_libraries(unit_tests
 
 # Enable testing
 enable_testing()
-add_test(NAME unit_tests COMMAND unit_tests)
+add_test(NAME unit COMMAND unit)
 
 # Installation commands
 include(GNUInstallDirs)
