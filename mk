@@ -27,7 +27,6 @@ do
         ;;
         build)
             clear
-            echo "compiler: $CXX"
 
             # remove any old unit test
             # /bin/rm -f $root/build/unit
