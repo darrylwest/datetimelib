@@ -21,6 +21,9 @@ namespace datetimelib {
     template <typename T> using Vec = std::vector<T>;
     template <typename T> using Func = std::function<T>;
     template <typename K, typename V> using HashMap = std::unordered_map<K, V>;
+    // Type alias for a function that provides the current time
+    using TimeProvider = std::function<std::chrono::system_clock::time_point()>;
+
 
     // unix timestamp
     unsigned int timestamp_seconds();
@@ -36,4 +39,9 @@ namespace datetimelib {
 
     // truncate an iso date to the nearest n minutes, defaulting to 5 minutes
     const Str truncate_to_minutes(const Str& isodate, const int minute = 5);
+
+    // add wait delay
+    std::chrono::system_clock::time_point get_current_time();
+    void wait_for_next_interval(const TimeProvider& get_now = get_current_time);
+    
 }  // namespace datetimelib

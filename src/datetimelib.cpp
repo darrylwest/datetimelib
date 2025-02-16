@@ -7,6 +7,8 @@
 #include <iomanip>      // for put_time, get_time
 #include <sstream>      // for stringstream
 #include <ctime>
+#include <thread>
+#include <functional>
 
 namespace datetimelib {
     // unix timestamp
@@ -58,6 +60,36 @@ namespace datetimelib {
         }
 
         return result;
+    }
+
+    // Default function to get the current system time
+    std::chrono::system_clock::time_point get_current_time() {
+        return std::chrono::system_clock::now();
+    }
+
+    // Function to wait for the next 5-minute interval
+    void wait_for_next_interval(const TimeProvider& get_now) {
+        using namespace std::chrono;
+
+        auto now = get_now();
+        std::time_t now_c = system_clock::to_time_t(now);
+        std::tm local_tm = *std::localtime(&now_c);
+
+        int current_minute = local_tm.tm_min;
+        int current_second = local_tm.tm_sec;
+
+        int minutes_past = current_minute % 5;
+        int seconds_until_next = (5 * 60) - (minutes_past * 60) - current_second;
+
+        int tolerance = 20; // seconds
+
+        if (seconds_until_next > (300 - tolerance)) {
+            // std::cout << "don't wait for " << seconds_until_next << " seconds...\n";
+            return;
+        }
+
+        // std::cout << "Waiting for " << seconds_until_next << " seconds...\n";
+        std::this_thread::sleep_for(seconds(seconds_until_next));
     }
 
     // truncate the iso8601 date to the nearest minute, default 5 minute mark
