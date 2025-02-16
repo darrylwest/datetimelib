@@ -96,6 +96,11 @@ target_link_libraries(unit
         spdlog::spdlog         # Link against spdlog
 )
 
+# Force CTest to regenerate test files
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS 
+    "${CMAKE_CURRENT_BINARY_DIR}/Testing/Temporary/LastTest.log"
+)
+
 # Enable testing
 enable_testing()
 add_test(NAME unit COMMAND unit)
