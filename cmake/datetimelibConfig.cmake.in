@@ -1,4 +1,27 @@
+# - Config file for the datetimelib library
+# It defines the following targets:
+# - datetimelib::datetimelib_static
+# - datetimelib::datetimelib_shared
+
 @PACKAGE_INIT@
 
-include("${CMAKE_CURRENT_LIST_DIR}/datetimelibTargets.cmake")
+# Set component properties if using components (not shown here, but good practice)
+# Example:  set_component_options(datetimelib COMPONENTS Core)
 
+if(TARGET datetimelib::datetimelib_static)
+  add_library(datetimelib::datetimelib_static INTERFACE IMPORTED)
+  set_target_properties(datetimelib::datetimelib_static PROPERTIES
+    INTERFACE_LINK_LIBRARIES "@INTERFACE_LINK_LIBRARIES@"
+    INTERFACE_INCLUDE_DIRECTORIES "@INTERFACE_INCLUDE_DIRECTORIES@"
+  )
+endif()
+
+if(TARGET datetimelib::datetimelib_shared)
+  add_library(datetimelib::datetimelib_shared INTERFACE IMPORTED)
+  set_target_properties(datetimelib::datetimelib_shared PROPERTIES
+    INTERFACE_LINK_LIBRARIES "@INTERFACE_LINK_LIBRARIES@"
+    INTERFACE_INCLUDE_DIRECTORIES "@INTERFACE_INCLUDE_DIRECTORIES@"
+  )
+endif()
+
+# ... any other configuration ...
