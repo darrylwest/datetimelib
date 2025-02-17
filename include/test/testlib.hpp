@@ -1,14 +1,20 @@
+
 //
 // 2024-12-10 18:46:25 dpw
 //
 
 #pragma once
 
-#include <ansi_colors.hpp>
+#include <vendor/ansi_colors.hpp>
+#include <chrono>
+#include <functional>
+#include <iomanip>
 #include <iostream>
-#include <sstream>
+#include <sstream>  // Add this include
+#include <string>
+#include <vector>
 
-namespace rcstestlib {
+namespace dtlib_test {
 
     using namespace colors;
 
@@ -29,7 +35,7 @@ namespace rcstestlib {
         // show the results
         friend std::ostream& operator<<(std::ostream& os, const Results v) {
             auto msg = (v.failed == 0) ? green + ", Ok" : red + ", Tests failed!";
-            os << v.name << ": tests=" << v.tests << ", passed=" << v.passed
+            os << "\t" << v.name << ": tests=" << v.tests << ", passed=" << v.passed
                << ", failed=" << v.failed << ", skipped=" << v.skipped << msg << reset;
             return os;
         }

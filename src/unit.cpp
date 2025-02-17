@@ -2,13 +2,14 @@
 // 2024-12-24 12:51:24 dpw
 //
 
-#include <vendor/testlib.hpp>
 #include <datetimelib/datetimelib.hpp>
+#include <test/testlib.hpp>
 #include <vendor/ansi_colors.hpp>
 #include <spdlog/spdlog.h>
 #include <cassert>
 
-using namespace rcstestlib;
+using namespace dtlib_test;
+using namespace colors;
 
 Results test_version() {
     Results r = {.name = "Version test"};

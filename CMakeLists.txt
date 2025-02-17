@@ -8,7 +8,7 @@ include(FetchContent)
 FetchContent_Declare(
     spdlog
     GIT_REPOSITORY https://github.com/gabime/spdlog.git
-    GIT_TAG v1.12.0  # Specify a version tag
+    GIT_TAG v1.12.0
 )
 FetchContent_MakeAvailable(spdlog)
 
@@ -90,10 +90,14 @@ set_target_properties(${PROJECT_NAME}_static PROPERTIES
 
 # Add unit test executable
 add_executable(unit src/unit.cpp)
+target_include_directories(unit PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/test
+)
 target_link_libraries(unit
     PRIVATE
-        ${PROJECT_NAME}_static  # Link against the static library
-        spdlog::spdlog         # Link against spdlog
+        ${PROJECT_NAME}_static
+        spdlog::spdlog
 )
 
 # Force CTest to regenerate test files
