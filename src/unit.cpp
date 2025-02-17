@@ -19,10 +19,41 @@ Results test_version() {
     return r;
 }
 
+// Function that returns a static point in time, 2024-02-15T04:26:40-0800
+std::chrono::system_clock::time_point get_static_time() {
+    using namespace std::chrono;
+    const system_clock::time_point fixed_time = system_clock::from_time_t(1708000000);
+    return fixed_time;
+}
+
 Results test_wait_for_next_mark() {
+    using namespace std::chrono;
     Results r = {.name = "Wait for next Mark"};
 
-    r.pass("");
+    auto tsnow = datetimelib::timestamp_seconds() - 1;
+
+    {
+        datetimelib::MarkProvider provider;
+        auto now = provider.get_now();
+        auto ts = duration_cast<seconds>(now.time_since_epoch()).count();
+        r.equals(ts > tsnow, "get now should be greater than 1 second in the past");
+    }
+
+    {
+        
+        // attach it to the provider
+        datetimelib::MarkProvider provider = {
+            .get_now = get_static_time,
+            .minutes_past = 3,
+            .tolerance = 45
+        };
+
+        auto t0 = datetimelib::timestamp_millis();
+        datetimelib::wait_for_next_mark(provider);
+        auto t1 = datetimelib::timestamp_millis();
+        auto elapsed = t1 - t0;
+        r.equals(elapsed < 1, "should not take any time at all");
+    }
 
     return r;
 }
