@@ -24,4 +24,9 @@ _still working on it..._
 * tested on ubuntu linux
 * need more tests...
 
+## Install
+
+* brew install fmt spdlog nlohmann-json openssl brotli
+* sudo apt install libfmt-dev libspdlog-dev nlohmann-json3-dev libssl-dev libbrotli-dev -y
+
 ###### 2025.02.16 | dpw

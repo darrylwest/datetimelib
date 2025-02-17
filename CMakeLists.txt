@@ -4,14 +4,6 @@ project(datetimelib VERSION 1.0.0 LANGUAGES CXX)
 # Include FetchContent for downloading dependencies
 include(FetchContent)
 
-# Fetch spdlog
-FetchContent_Declare(
-    spdlog
-    GIT_REPOSITORY https://github.com/gabime/spdlog.git
-    GIT_TAG v1.12.0
-)
-FetchContent_MakeAvailable(spdlog)
-
 # Specify C++20 standard
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -97,7 +89,6 @@ target_include_directories(unit PRIVATE
 target_link_libraries(unit
     PRIVATE
         ${PROJECT_NAME}_static
-        spdlog::spdlog
 )
 
 # Force CTest to regenerate test files
