@@ -73,10 +73,10 @@ namespace datetimelib {
     }
 
     // Function to wait for the next 5-minute interval with a tolerance of +20 seconds
-    void wait_for_next_interval(const TimeProvider& get_now) {
+    void wait_for_next_mark(const MarkProvider& provider) {
         using namespace std::chrono;
 
-        auto now = get_now();
+        auto now = provider.get_now();
         std::time_t now_c = system_clock::to_time_t(now);
         std::tm local_tm = *std::localtime(&now_c);
 
@@ -84,12 +84,9 @@ namespace datetimelib {
         int current_second = local_tm.tm_sec;
 
         int minutes_past = current_minute % 5;
-        int seconds_until_next = (5 * 60) - (minutes_past * 60) - current_second;
+        int seconds_until_next = (provider.minutes_past * 60) - (provider.minutes_past * 60) - current_second;
 
-        int tolerance = 20; // seconds
-
-        if (seconds_until_next > (300 - tolerance)) {
-            // std::cout << "don't wait for " << seconds_until_next << " seconds...\n";
+        if (seconds_until_next > (300 - provider.tolerance)) {
             return;
         }
 

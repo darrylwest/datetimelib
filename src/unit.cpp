@@ -19,6 +19,14 @@ Results test_version() {
     return r;
 }
 
+Results test_wait_for_next_mark() {
+    Results r = {.name = "Wait for next Mark"};
+
+    r.pass("");
+
+    return r;
+}
+
 Results test_local_iso_datetime() {
     Results r = {.name = "Local ISO Datetime"};
 
@@ -55,9 +63,10 @@ int main() {
     };
 
     try {
+        run_test(test_version);
         run_test(test_local_iso_datetime);
         run_test(test_truncate_to_minutes);
-        run_test(test_version);
+        run_test(test_wait_for_next_mark);
         
         spdlog::info("{}", summary.to_string());
         auto msg = (summary.failed == 0) ? green + "Ok" : "\n" + red + "Tests failed!";
