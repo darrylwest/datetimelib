@@ -14,8 +14,14 @@
 * Exports an installable CMake package for easy linking in other projects (find_package(datetimelib)).
 * Installs headers to include/ and libraries to lib/.
 
+## API
+
+_still working on it..._
+
 ## Unit Tests
 
-* need more...
+* tested on osx x_86 and arm86
+* tested on ubuntu linux
+* need more tests...
 
 ###### 2025.02.16 | dpw
