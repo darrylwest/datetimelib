@@ -33,7 +33,7 @@ namespace datetimelib {
     };
 
 
-    constexpr StrView VERSION = "0.5.1-123";
+    constexpr StrView VERSION = "0.5.2-124";
 
     // return the lib's version
     StrView get_version();
