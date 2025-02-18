@@ -29,4 +29,14 @@ _still working on it..._
 * brew install fmt spdlog nlohmann-json openssl brotli
 * sudo apt install libfmt-dev libspdlog-dev nlohmann-json3-dev libssl-dev libbrotli-dev -y
 
-###### 2025.02.16 | dpw
+## CMake Example
+
+* include as a sub project
+* build and install locally
+* header only version?
+
+## API
+
+_TBD_
+
+###### 2025.02.18 | dpw
