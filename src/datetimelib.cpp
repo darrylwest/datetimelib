@@ -4,6 +4,7 @@
 
 #include <datetimelib/datetimelib.hpp>
 #include <chrono>
+#include <iostream>
 #include <iomanip>      // for put_time, get_time
 #include <sstream>      // for stringstream
 #include <ctime>
@@ -76,6 +77,9 @@ namespace datetimelib {
     void wait_for_next_mark(const MarkProvider& provider) {
         using namespace std::chrono;
 
+        std::cout << "provider minutes_past:  " << provider.minutes_past << "\n";
+        std::cout << "provider tolerance   :  " << provider.tolerance << "\n";
+
         auto now = provider.get_now();
         std::time_t now_c = system_clock::to_time_t(now);
         std::tm local_tm = *std::localtime(&now_c);
@@ -83,14 +87,14 @@ namespace datetimelib {
         int current_minute = local_tm.tm_min;
         int current_second = local_tm.tm_sec;
 
-        int minutes_past = current_minute % 5;
+        int minutes_past = current_minute % provider.minutes_past;
         int seconds_until_next = (provider.minutes_past * 60) - (provider.minutes_past * 60) - current_second;
 
-        if (seconds_until_next > (300 - provider.tolerance)) {
+        if (seconds_until_next > ((provider.minutes_past * 60) - provider.tolerance)) {
             return;
         }
 
-        // std::cout << "Waiting for " << seconds_until_next << " seconds...\n";
+        std::cout << "Waiting for " << seconds_until_next << " seconds...\n";
         std::this_thread::sleep_for(seconds(seconds_until_next));
     }
 

@@ -46,7 +46,7 @@ Results test_wait_for_next_mark() {
         datetimelib::MarkProvider provider = {
             .get_now = get_static_time,
             .minutes_past = 3,
-            .tolerance = 45
+            .tolerance = 30
         };
 
         auto t0 = datetimelib::timestamp_millis();
