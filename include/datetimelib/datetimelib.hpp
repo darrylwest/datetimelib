@@ -22,10 +22,11 @@ namespace datetimelib {
     template <typename T> using Func = std::function<T>;
     template <typename K, typename V> using HashMap = std::unordered_map<K, V>;
 
+    // the lib version
+    constexpr StrView VERSION = "0.5.4-126";
+
     // add wait delay
     std::chrono::system_clock::time_point get_current_time();
-
-    constexpr StrView VERSION = "0.5.3-125";
 
     // return the lib's version
     StrView get_version();
