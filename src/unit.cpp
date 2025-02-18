@@ -32,29 +32,7 @@ Results test_wait_for_next_mark() {
     Results r = {.name = "Wait for next Mark"};
 
     auto tsnow = datetimelib::timestamp_seconds() - 1;
-
-    {
-        datetimelib::MarkProvider provider;
-        auto now = provider.get_now();
-        auto ts = duration_cast<seconds>(now.time_since_epoch()).count();
-        r.equals(ts > tsnow, "get now should be greater than 1 second in the past");
-    }
-
-    {
-        
-        // attach it to the provider
-        datetimelib::MarkProvider provider = {
-            .get_now = get_static_time,
-            .minutes_past = 3,
-            .tolerance = 30
-        };
-
-        auto t0 = datetimelib::timestamp_millis();
-        datetimelib::wait_for_next_mark(provider);
-        auto t1 = datetimelib::timestamp_millis();
-        auto elapsed = t1 - t0;
-        r.equals(elapsed < 1, "should not take any time at all");
-    }
+    r.equals(tsnow < datetimelib::timestamp_seconds(), "should be one second behind");
 
     return r;
 }

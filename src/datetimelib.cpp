@@ -68,36 +68,6 @@ namespace datetimelib {
         return result;
     }
 
-    // Default function to get the current system time
-    std::chrono::system_clock::time_point get_current_time() {
-        return std::chrono::system_clock::now();
-    }
-
-    // Function to wait for the next 5-minute interval with a tolerance of +20 seconds
-    void wait_for_next_mark(const MarkProvider& provider) {
-        using namespace std::chrono;
-
-        std::cout << "provider minutes_past:  " << provider.minutes_past << "\n";
-        std::cout << "provider tolerance   :  " << provider.tolerance << "\n";
-
-        auto now = provider.get_now();
-        std::time_t now_c = system_clock::to_time_t(now);
-        std::tm local_tm = *std::localtime(&now_c);
-
-        int current_minute = local_tm.tm_min;
-        int current_second = local_tm.tm_sec;
-
-        int minutes_past = current_minute % provider.minutes_past;
-        int seconds_until_next = (provider.minutes_past * 60) - (provider.minutes_past * 60) - current_second;
-
-        if (seconds_until_next > ((provider.minutes_past * 60) - provider.tolerance)) {
-            return;
-        }
-
-        std::cout << "Waiting for " << seconds_until_next << " seconds...\n";
-        std::this_thread::sleep_for(seconds(seconds_until_next));
-    }
-
     // truncate the iso8601 date to the nearest minute, default 5 minute mark
     const Str truncate_to_minutes(const Str& isodate, const int minute) {
         using namespace std::chrono;
@@ -121,6 +91,67 @@ namespace datetimelib {
         std::ostringstream result;
         result << std::put_time(truncatedTm, "%Y-%m-%dT%H:%M");
         return result.str();
+    }
+
+    void sleep_seconds(const int seconds, const bool verbose) {
+        if (verbose) {
+            std::cout << "countdown: " << std::endl;
+        
+            auto show_countdown = [](const int seconds) {
+                std::cout << "\r\033[K";  // Move to start of line and clear it
+                std::cout << "\033[1;33m" << "seconds remaining: " << seconds << "\033[0m";
+                std::cout.flush();
+            };
+        
+            show_countdown(seconds);
+            for (int sec = seconds; sec > 0; --sec) {
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+        
+                if (sec < 10) {
+                    show_countdown(sec);
+                } else if (sec % 10 == 0) {
+                    show_countdown(sec);
+                } else {
+                    std::cout << "." << std::flush;
+                }
+            }
+        
+            // Final message
+            show_countdown(0);
+            std::cout << " : \033[1;32mdone!\033[0m" << std::endl;
+
+        } else {
+            std::this_thread::sleep_for(std::chrono::seconds(seconds));
+        }
+    }
+
+    // configure the MarkProbider or use the default
+    void wait_for_next_mark(const MarkProvider &provider, const bool verbose) {
+        using namespace std::chrono;
+    
+        // mod for second of hour
+        auto now = provider.get_seconds() % 3600;
+    
+        const int mark_second = provider.mark_minute * 60;
+    
+        const int delay = mark_second - now % mark_second;
+    
+        const int tol = provider.tolerance;
+    
+        // if the delay would wait beyond the mark_second - tolerance, then skip delay
+        const int max_delay = mark_second - provider.tolerance;
+        if (delay > max_delay) {
+            if (verbose) {
+                std::cout << "SKIP the wait for " << delay << " seconds, returning now...\n";
+            }
+
+            return;
+        }
+    
+        if (verbose) {
+            std::cout << "Waiting for " << delay << " seconds...\n";
+        }
+        provider.delay_seconds(delay, verbose);
     }
 
 }  // namespace datetimelib

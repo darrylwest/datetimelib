@@ -25,14 +25,6 @@ namespace datetimelib {
     // add wait delay
     std::chrono::system_clock::time_point get_current_time();
 
-    // Type alias for a function that provides the current time
-    struct MarkProvider {
-        Func<std::chrono::system_clock::time_point()> get_now = get_current_time;
-        int minutes_past = 5;
-        int tolerance = 20;
-    };
-
-
     constexpr StrView VERSION = "0.5.3-125";
 
     // return the lib's version
@@ -53,7 +45,17 @@ namespace datetimelib {
     // truncate an iso date to the nearest n minutes, defaulting to 5 minutes
     const Str truncate_to_minutes(const Str& isodate, const int minute = 5);
 
+    void sleep_seconds(const int seconds, const bool verbose = false);
+
+    // Type alias for a function that provides the current time
+    struct MarkProvider {
+        Func<int()> get_seconds = timestamp_seconds;
+        int mark_minute = 5;
+        int tolerance = 20; // seconds
+        Func<void(int, bool)> delay_seconds = sleep_seconds;
+    };
+
     // Function to wait for the next 5-minute interval with a tolerance of +20 seconds
-    void wait_for_next_mark(const MarkProvider& provider);
+    void wait_for_next_mark(const MarkProvider& provider = MarkProvider{}, const bool verbose = false);
     
 }  // namespace datetimelib
