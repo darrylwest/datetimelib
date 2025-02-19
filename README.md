@@ -10,9 +10,16 @@
 
 ## What it does
 
-* Builds both a static (libdatetime.a) and shared (libdatetime.so or .dll) library.
-* Exports an installable CMake package for easy linking in other projects (find_package(datetimelib)).
-* Installs headers to include/ and libraries to lib/.
+* helper methods to get timestamps in seconds (unix timestamp) and milliseconds
+* provides a wait timer to syncronize start events to the second
+* converts timestamp to iso date string
+* parese an iso date string to minutes
+
+## The cmake functions
+
+* builds both a static (libdatetime.a) and shared (libdatetime.so or .dll) library.
+* exports an installable CMake package for easy linking in other projects (find_package(datetimelib)).
+* installs headers to include/ and libraries to lib/.
 
 ## API
 
