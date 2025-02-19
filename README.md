@@ -7,6 +7,7 @@
 |_____/|___._||____|_____|  |___| |__||__|__|__|_____||_______|__|_____| |____| |__|   |__|  
                                                                                              
 ```
+*Note: tested only on c++20, clang++ on osx intel/arm and linux.*
 
 ## What it does
 
@@ -15,7 +16,7 @@
 * converts timestamp to iso date string
 * parese an iso date string to minutes
 
-## The cmake functions
+## cmake
 
 * builds both a static (libdatetime.a) and shared (libdatetime.so or .dll) library.
 * exports an installable CMake package for easy linking in other projects (find_package(datetimelib)).
@@ -33,13 +34,17 @@ _still working on it..._
 
 ## Install
 
-* brew install fmt spdlog nlohmann-json openssl brotli
-* sudo apt install libfmt-dev libspdlog-dev nlohmann-json3-dev libssl-dev libbrotli-dev -y
+* brew install spdlog
+* sudo apt install libspdlog-dev -y
 
 ## CMake Example
 
 * include as a sub project
 * build and install locally
 * header only version?
+
+## Use Cases
+
+_comming..._
 
 ###### 2025.02.18 | dpw
