@@ -7,7 +7,7 @@
 |_____/|___._||____|_____|  |___| |__||__|__|__|_____||_______|__|_____| |____| |__|   |__|  
                                                                                              
 ```
-*Note: tested only on c++20, clang++ on osx intel/arm and linux.*
+*Note: only tested with c++20, clang++ on osx intel/arm and linux.*
 
 ## What it does
 
