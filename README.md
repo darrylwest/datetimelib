@@ -42,8 +42,4 @@ _still working on it..._
 * build and install locally
 * header only version?
 
-## API
-
-_TBD_
-
 ###### 2025.02.18 | dpw
