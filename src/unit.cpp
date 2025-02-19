@@ -34,6 +34,10 @@ Results test_wait_for_next_mark() {
     auto tsnow = datetimelib::timestamp_seconds() - 1;
     r.equals(tsnow < datetimelib::timestamp_seconds(), "should be one second behind");
 
+    //
+    // TODO: need unit tests with alternate MarkProviders
+    //
+
     return r;
 }
 
