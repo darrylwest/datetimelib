@@ -79,6 +79,32 @@ Results test_ts_to_local() {
   return r;
 }
 
+Results test_ts_to_utc() {
+  Results r = {.name = "Unix ts to UTC/Zulu"};
+
+  std::time_t ts = 1740369686;
+  auto dt = datetimelib::ts_to_utc_isodate(ts);
+  spdlog::debug("ts {} local {}", ts, dt);
+  r.equals(dt == "2025-02-24T04:01:26Z", "ts to UTC/zulu");
+
+  ts = 2840369686;
+  dt = datetimelib::ts_to_utc_isodate(ts);
+  spdlog::debug("ts {} local {}", ts, dt);
+  r.equals(dt == "2060-01-03T15:34:46Z", "future ts to UTC/zulu");
+
+  // test for the Y2038 bug
+  ts = 2'147'483'647; // max 32 bit int
+  dt = datetimelib::ts_to_utc_isodate(ts);
+  spdlog::debug("ts {} local {}", ts, dt);
+  r.equals(dt == "2038-01-19T03:14:07Z", "Y2038 future ts to UTC/zulu");
+  ts += 1; // when it rolls over
+  dt = datetimelib::ts_to_utc_isodate(ts);
+  spdlog::debug("ts {} local {}", ts, dt);
+  r.equals(dt == "2038-01-19T03:14:08Z", "Y2038 future ts to UTC/zulu");
+
+  return r;
+}
+
 int main() {
   spdlog::set_level(spdlog::level::info);
 
@@ -96,9 +122,10 @@ int main() {
 
   try {
     run_test(test_version);
-    run_test(test_ts_to_local);
     run_test(test_local_iso_datetime);
     run_test(test_truncate_to_minutes);
+    run_test(test_ts_to_local);
+    run_test(test_ts_to_utc);
     run_test(test_wait_for_next_mark);
 
     spdlog::info("{}", summary.to_string());

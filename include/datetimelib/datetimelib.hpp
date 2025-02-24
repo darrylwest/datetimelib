@@ -16,6 +16,7 @@ namespace datetimelib {
 
 using Str = std::string;
 using StrView = std::string_view;
+using TimePoint = std::chrono::system_clock::time_point;
 template <typename T> using Vec = std::vector<T>;
 template <typename T> using Func = std::function<T>;
 template <typename K, typename V> using HashMap = std::unordered_map<K, V>;
@@ -24,7 +25,7 @@ template <typename K, typename V> using HashMap = std::unordered_map<K, V>;
 constexpr StrView VERSION = "0.5.6-128";
 
 // add wait delay
-std::chrono::system_clock::time_point get_current_time();
+TimePoint get_current_time();
 
 // return the lib's version
 StrView get_version();
@@ -32,11 +33,14 @@ StrView get_version();
 // unix timestamp
 std::time_t timestamp_seconds();
 
-// the time in milliseconds
+// the timestamp in milliseconds
 std::time_t timestamp_millis();
 
 // convert the unix timestamp to the local iso date
 Str ts_to_local_isodate(const std::time_t timestamp);
+
+// convert the unix timestamp to the utc/zulu iso date
+Str ts_to_utc_isodate(const std::time_t timestamp);
 
 // returns the local datetime in iso8601 format
 Str local_iso_datetime(const std::time_t now_seconds = 0);
