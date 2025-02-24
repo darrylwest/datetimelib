@@ -37,10 +37,10 @@ namespace datetimelib {
     std::time_t timestamp_millis();
 
     // convert the unix timestamp to the local iso date
-    Str ts_to_local_isodate(const std::time_t timestamp);
+    Str ts_to_local_isodate(const std::time_t timestamp, const char *format = "%FT%T%z");
 
     // convert the unix timestamp to the utc/zulu iso date
-    Str ts_to_utc_isodate(const std::time_t timestamp);
+    Str ts_to_utc_isodate(const std::time_t timestamp, const char *format = "%FT%TZ");
 
     // returns the local datetime in iso8601 format
     Str local_iso_datetime(const std::time_t now_seconds = 0);

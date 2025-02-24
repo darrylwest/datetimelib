@@ -31,19 +31,19 @@ namespace datetimelib {
     }
 
     // convert the unix timestamp to the local iso date
-    Str ts_to_local_isodate(const std::time_t unix_timestamp) {
+    Str ts_to_local_isodate(const std::time_t unix_timestamp, const char *format) {
         // Convert time_t to std::tm (local time)
         std::tm local_tm = *std::localtime(&unix_timestamp);
 
         // Format the local time as ISO8601
         std::ostringstream oss;
-        oss << std::put_time(&local_tm, "%FT%T%z");
+        oss << std::put_time(&local_tm, format);
 
         return oss.str();
     }
 
     // convert the unix timestamp to the utc/zulu iso date
-    Str ts_to_utc_isodate(const std::time_t timestamp) {
+    Str ts_to_utc_isodate(const std::time_t timestamp, const char *format) {
         using std::chrono::system_clock;
         system_clock::time_point tp = system_clock::from_time_t(timestamp);
 
@@ -55,7 +55,7 @@ namespace datetimelib {
 
         // Format as ISO 8601
         std::ostringstream oss;
-        oss << std::put_time(&utc_tm, "%Y-%m-%dT%H:%M:%SZ");
+        oss << std::put_time(&utc_tm, format);  // "%Y-%m-%dT%H:%M:%SZ");
 
         return oss.str();
     }

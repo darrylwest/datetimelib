@@ -80,6 +80,7 @@ Results test_ts_to_local() {
 
 Results test_ts_to_utc() {
     Results r = {.name = "Unix ts to UTC/Zulu"};
+    // spdlog::set_level(spdlog::level::debug);
 
     std::time_t ts = 1740369686;
     auto dt = datetimelib::ts_to_utc_isodate(ts);
