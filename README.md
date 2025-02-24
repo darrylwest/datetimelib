@@ -7,12 +7,20 @@
 |_____/|___._||____|_____|  |___| |__||__|__|__|_____||_______|__|_____| |____| |__|   |__|  
                                                                                              
 ```
+*Note: only tested with c++20, clang++ on osx intel/arm and linux.*
 
 ## What it does
 
-* Builds both a static (libdatetime.a) and shared (libdatetime.so or .dll) library.
-* Exports an installable CMake package for easy linking in other projects (find_package(datetimelib)).
-* Installs headers to include/ and libraries to lib/.
+* helper methods to get timestamps in seconds (unix timestamp) and milliseconds
+* provides a wait timer to syncronize start events to the second
+* converts timestamp to iso date string
+* parese an iso date string to minutes
+
+## cmake
+
+* builds both a static (libdatetime.a) and shared (libdatetime.so or .dll) library.
+* exports an installable CMake package for easy linking in other projects (find_package(datetimelib)).
+* installs headers to include/ and libraries to lib/.
 
 ## API
 
@@ -26,8 +34,8 @@ _still working on it..._
 
 ## Install
 
-* brew install fmt spdlog nlohmann-json openssl brotli
-* sudo apt install libfmt-dev libspdlog-dev nlohmann-json3-dev libssl-dev libbrotli-dev -y
+* brew install spdlog
+* sudo apt install libspdlog-dev -y
 
 ## CMake Example
 
@@ -35,8 +43,8 @@ _still working on it..._
 * build and install locally
 * header only version?
 
-## API
+## Use Cases
 
-_TBD_
+_comming..._
 
 ###### 2025.02.18 | dpw
