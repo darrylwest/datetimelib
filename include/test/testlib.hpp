@@ -34,8 +34,11 @@ namespace dtlib_test {
 
         // show the results
         friend std::ostream& operator<<(std::ostream& os, const Results v) {
+            auto ok = "✔︎ ";
+            auto not_ok = "✖︎ ";
+            auto icon = (v.failed == 0) ? ok : not_ok;
             auto msg = (v.failed == 0) ? green + ", Ok" : red + ", Tests failed!";
-            os << "\t" << v.name << ": tests=" << v.tests << ", passed=" << v.passed
+            os << icon << v.name << ": tests=" << v.tests << ", passed=" << v.passed
                << ", failed=" << v.failed << ", skipped=" << v.skipped << msg << reset;
             return os;
         }
