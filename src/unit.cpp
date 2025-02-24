@@ -17,6 +17,7 @@ Results test_version() {
 
     auto vers = datetimelib::get_version();
     r.equals(vers == datetimelib::VERSION, "should be at version 0.5");
+    r.equals(vers.starts_with("0.6."), "should be at the correct major/minor version");
 
     return r;
 }
@@ -105,6 +106,15 @@ Results test_ts_to_utc() {
     return r;
 }
 
+Results test_time_t_size() {
+    Results r = {.name = "Test time_t size"};
+
+    r.equals(sizeof(std::time_t) == 8, "should be 64 bits, 8 bytes");
+    r.equals(sizeof(time_t) == 8, "should be 64 bits, 8 bytes");
+
+    return r;
+}
+
 int main() {
     spdlog::set_level(spdlog::level::info);
 
@@ -122,6 +132,7 @@ int main() {
 
     try {
         run_test(test_version);
+        run_test(test_time_t_size);
         run_test(test_local_iso_datetime);
         run_test(test_truncate_to_minutes);
         run_test(test_ts_to_local);

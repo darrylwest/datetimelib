@@ -45,13 +45,9 @@ namespace datetimelib {
     // convert the unix timestamp to the utc/zulu iso date
     Str ts_to_utc_isodate(const std::time_t timestamp, const char *format) {
         using std::chrono::system_clock;
-        system_clock::time_point tp = system_clock::from_time_t(timestamp);
-
-        // Convert to time_t for formatting
-        std::time_t tt = system_clock::to_time_t(tp);
 
         // Convert to zulu time
-        std::tm utc_tm = *std::gmtime(&tt);
+        std::tm utc_tm = *std::gmtime(&timestamp);
 
         // Format as ISO 8601
         std::ostringstream oss;
