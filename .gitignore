@@ -6,3 +6,5 @@
 .ssh/*.pem
 logs/*.log
 Testing
+/.idea
+/cmake-build-*

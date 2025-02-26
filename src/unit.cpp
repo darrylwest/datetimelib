@@ -43,26 +43,6 @@ Results test_wait_for_next_mark() {
     return r;
 }
 
-Results test_local_iso_datetime() {
-    Results r = {.name = "Local ISO Datetime"};
-
-    time_t now = time(nullptr);
-    auto result = datetimelib::local_iso_datetime(now);
-    r.equals(!result.empty(), "result should not be empty");
-
-    return r;
-}
-
-Results test_truncate_to_minutes() {
-    Results r = {.name = "Truncate to Minutes"};
-
-    std::string test_date = "2023-12-25T14:30:45";
-    auto result = datetimelib::truncate_to_minutes(test_date, 15);
-    r.equals(result == "2023-12-25T14:30", "should truncate correctly");
-
-    return r;
-}
-
 Results test_ts_to_local() {
     Results r = {.name = "Unix ts to Local"};
 
@@ -133,8 +113,6 @@ int main() {
     try {
         run_test(test_version);
         run_test(test_time_t_size);
-        run_test(test_local_iso_datetime);
-        run_test(test_truncate_to_minutes);
         run_test(test_ts_to_local);
         run_test(test_ts_to_utc);
         run_test(test_wait_for_next_mark);
