@@ -2,9 +2,6 @@
 // 2024-12-24 12:51:24 dpw
 //
 
-// #include <spdlog/spdlog.h>
-
-#include <cassert>
 #include <datetimelib/datetimelib.hpp>
 #include <test/testlib.hpp>
 #include <vendor/ansi_colors.hpp>
@@ -50,12 +47,10 @@ Results test_ts_to_local() {
 
     std::time_t ts = 1740369686;
     auto dt = datetimelib::ts_to_local_isodate(ts);
-    // spdlog::debug("ts {} local {}", ts, dt);
     r.equals(dt == "2025-02-23T20:01:26-0800", "ts to local");
 
     ts = 2840369686;
     dt = datetimelib::ts_to_local_isodate(ts);
-    // spdlog::debug("ts {} local {}", ts, dt);
     r.equals(dt == "2060-01-03T07:34:46-0800", "future ts to local");
 
     return r;
@@ -63,26 +58,21 @@ Results test_ts_to_local() {
 
 Results test_ts_to_utc() {
     Results r = {.name = "Unix ts to UTC/Zulu"};
-    // spdlog::set_level(spdlog::level::debug);
 
     std::time_t ts = 1740369686;
     auto dt = datetimelib::ts_to_utc_isodate(ts);
-    // spdlog::debug("ts {} local {}", ts, dt);
     r.equals(dt == "2025-02-24T04:01:26Z", "ts to UTC/zulu");
 
     ts = 2840369686;
     dt = datetimelib::ts_to_utc_isodate(ts);
-    // spdlog::debug("ts {} local {}", ts, dt);
     r.equals(dt == "2060-01-03T15:34:46Z", "future ts to UTC/zulu");
 
     // test for the Y2038 bug
     ts = 2'147'483'647;  // max 32 bit int
     dt = datetimelib::ts_to_utc_isodate(ts);
-    // spdlog::debug("ts {} local {}", ts, dt);
     r.equals(dt == "2038-01-19T03:14:07Z", "Y2038 future ts to UTC/zulu");
     ts += 1;  // when it rolls over
     dt = datetimelib::ts_to_utc_isodate(ts);
-    // spdlog::debug("ts {} local {}", ts, dt);
     r.equals(dt == "2038-01-19T03:14:08Z", "Y2038 future ts to UTC/zulu");
 
     return r;
@@ -98,10 +88,8 @@ Results test_time_t_size() {
 }
 
 int main() {
-    // spdlog::set_level(spdlog::level::info);
 
     const auto vers = datetimelib::VERSION;
-    std::println("{}Starting Unit Tests: Version: {}{}", cyan, vers, reset);
     std::println("{}Starting Unit Tests: Version: {}{}", cyan, vers, reset);
 
     Results summary = {.name = "Unit Test Summary"};
@@ -123,11 +111,12 @@ int main() {
         run_test(test_ts_to_utc);
         run_test(test_wait_for_next_mark);
         timer.stop();
-        timer.show_duration();
 
         std::println("{}", summary.to_string());
         auto msg = (summary.failed == 0) ? green + "Ok" : "\n" + red + "Tests failed!";
         std::println("Unit Test Results: {}{}{}", cyan, msg, reset);
+
+        timer.show_duration();
 
         return summary.failed;
     } catch (const std::exception &e) {
