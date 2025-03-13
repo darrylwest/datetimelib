@@ -39,14 +39,6 @@ foreach(target ${PROJECT_NAME})
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
             $<INSTALL_INTERFACE:include>
     )
-    
-    if(APPLE)
-        # Add system include paths for each target
-        target_include_directories(${target} SYSTEM PRIVATE
-            /usr/local/include
-            /usr/include
-        )
-    endif()
 endforeach()
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
