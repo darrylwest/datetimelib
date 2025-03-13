@@ -9,9 +9,6 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Enable position independent code for shared libraries
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
 # Add minimum compiler version check
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 16)
@@ -29,20 +26,14 @@ set(HEADERS
     include/datetimelib/datetimelib.hpp
 )
 
-# Create shared library
-add_library(${PROJECT_NAME}_shared SHARED ${SOURCES} ${HEADERS})
-target_compile_definitions(${PROJECT_NAME}_shared PRIVATE
-    _GLIBCXX_USE_CXX11_ABI=1
-)
-
 # Create static library
-add_library(${PROJECT_NAME}_static STATIC ${SOURCES} ${HEADERS})
-target_compile_definitions(${PROJECT_NAME}_static PRIVATE
+add_library(${PROJECT_NAME} STATIC ${SOURCES} ${HEADERS})
+target_compile_definitions(${PROJECT_NAME} PRIVATE
     _GLIBCXX_USE_CXX11_ABI=1
 )
 
 # Set properties for both libraries
-foreach(target ${PROJECT_NAME}_shared ${PROJECT_NAME}_static)
+foreach(target ${PROJECT_NAME})
     target_include_directories(${target}
         PUBLIC
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -59,14 +50,7 @@ foreach(target ${PROJECT_NAME}_shared ${PROJECT_NAME}_static)
     endif()
 endforeach()
 
-# Set output names
-set_target_properties(${PROJECT_NAME}_shared PROPERTIES
-    OUTPUT_NAME ${PROJECT_NAME}
-    VERSION ${PROJECT_VERSION}
-    SOVERSION ${PROJECT_VERSION_MAJOR}
-)
-
-set_target_properties(${PROJECT_NAME}_static PROPERTIES
+set_target_properties(${PROJECT_NAME} PROPERTIES
     OUTPUT_NAME ${PROJECT_NAME}
 )
 
@@ -78,7 +62,7 @@ target_include_directories(unit PRIVATE
 )
 target_link_libraries(unit
     PRIVATE
-        ${PROJECT_NAME}_static
+        ${PROJECT_NAME}
 )
 
 # Force CTest to regenerate test files
@@ -93,7 +77,7 @@ add_test(NAME unit COMMAND unit)
 # Installation commands
 include(GNUInstallDirs)
 
-install(TARGETS ${PROJECT_NAME}_shared ${PROJECT_NAME}_static
+install(TARGETS ${PROJECT_NAME}
     EXPORT ${PROJECT_NAME}Targets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
