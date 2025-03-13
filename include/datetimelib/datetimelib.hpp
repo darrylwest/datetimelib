@@ -55,7 +55,6 @@ namespace datetimelib {
 
     // Function to wait for the next 5-minute interval with a tolerance of +20
     // seconds
-    void wait_for_next_mark(const MarkProvider &provider = MarkProvider{},
-                            bool verbose = false);
+    void wait_for_next_mark(const MarkProvider &provider = MarkProvider{}, bool verbose = false);
 
 }  // namespace datetimelib
