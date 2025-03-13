@@ -10,6 +10,7 @@
 #include <iostream>
 #include <sstream>  // for stringstream
 #include <thread>
+#include <algorithm>
 
 namespace datetimelib {
     // return the version

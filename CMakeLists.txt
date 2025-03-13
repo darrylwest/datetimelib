@@ -5,15 +5,51 @@ project(datetimelib VERSION 1.0.0 LANGUAGES CXX)
 include(FetchContent)
 
 # Specify C++20 standard
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+
+# Useful for IDE integration and static analysis tools
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Add minimum compiler version check
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 16)
         message(FATAL_ERROR "Clang version must be at least 16!")
     endif()
+endif()
+
+# Add version checks for system requirements
+include(CheckCXXCompilerFlag)
+CHECK_CXX_COMPILER_FLAG("-std=c++23" COMPILER_SUPPORTS_CXX23)
+if(NOT COMPILER_SUPPORTS_CXX23)
+    message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++23 support.")
+endif()
+
+# MacOS universal binary setup
+if(APPLE)
+    execute_process(
+            COMMAND uname -m
+            OUTPUT_VARIABLE HOST_ARCHITECTURE
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+
+    if(HOST_ARCHITECTURE STREQUAL "arm64")
+        set(CMAKE_OSX_ARCHITECTURES "arm64")
+    else()
+        set(CMAKE_OSX_ARCHITECTURES "x86_64")
+    endif()
+    list(APPEND DEPENDENT_LIBRARIES
+            "-framework CoreFoundation"
+            "-framework Security"
+    )
+    message(STATUS "osx arch: ${CMAKE_OSX_ARCHITECTURES}")
+elseif(UNIX AND NOT APPLE)
+    set(PLATFORM_SPECIFIC_LIBS
+            # Ubuntu-specific libraries if needed
+    )
+    #   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+    message(STATUS "linux")
 endif()
 
 # Add library source files
