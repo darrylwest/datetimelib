@@ -8,6 +8,8 @@
 #include <datetimelib/datetimelib.hpp>
 #include <test/testlib.hpp>
 #include <vendor/ansi_colors.hpp>
+#include <datetimelib/perftimer.hpp>
+#include <print>
 
 using namespace dtlib_test;
 using namespace colors;
@@ -99,31 +101,37 @@ int main() {
     // spdlog::set_level(spdlog::level::info);
 
     const auto vers = datetimelib::VERSION;
-    // spdlog::info("{}Starting Unit Tests: Version: {}{}", cyan, vers, reset);
+    std::println("{}Starting Unit Tests: Version: {}{}", cyan, vers, reset);
+    std::println("{}Starting Unit Tests: Version: {}{}", cyan, vers, reset);
 
     Results summary = {.name = "Unit Test Summary"};
 
     // lambda to run a test and add its result to the summary
     auto run_test = [&summary](auto test_func) {
         auto result = test_func();
-        // spdlog::info("{}", result.to_string());
+        std::println("{}", result.to_string());
         summary.add(result);
     };
 
+    datetimelib::perftimer::PerfTimer timer("Unit test");
+
     try {
+        timer.start();
         run_test(test_version);
         run_test(test_time_t_size);
         run_test(test_ts_to_local);
         run_test(test_ts_to_utc);
         run_test(test_wait_for_next_mark);
+        timer.stop();
+        timer.show_duration();
 
-        // spdlog::info("{}", summary.to_string());
+        std::println("{}", summary.to_string());
         auto msg = (summary.failed == 0) ? green + "Ok" : "\n" + red + "Tests failed!";
-        // spdlog::info("Unit Test Results: {}{}{}", cyan, msg, reset);
+        std::println("Unit Test Results: {}{}{}", cyan, msg, reset);
 
         return summary.failed;
     } catch (const std::exception &e) {
-        // spdlog::error("Test failed: {}", e.what());
+        std::println("{}Test failed: {}{}", red, e.what(), reset);
         return 1;
     }
 }
