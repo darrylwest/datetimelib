@@ -12,20 +12,10 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Enable position independent code for shared libraries
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-# Platform-specific compiler flags
-if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    add_compile_options(-D_GLIBCXX_USE_CXX11_ABI=1)
-    
-    if(APPLE)
-        # Add system include paths for macOS
-        include_directories(SYSTEM
-            /usr/local/include
-            /usr/include
-            /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include
-        )
-        
-        # Force include cstdio before other system headers
-        add_compile_options(-include cstdio)
+# Add minimum compiler version check
+if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 16)
+        message(FATAL_ERROR "Clang version must be at least 16!")
     endif()
 endif()
 

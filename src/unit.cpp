@@ -2,7 +2,7 @@
 // 2024-12-24 12:51:24 dpw
 //
 
-#include <spdlog/spdlog.h>
+// #include <spdlog/spdlog.h>
 
 #include <cassert>
 #include <datetimelib/datetimelib.hpp>
@@ -48,12 +48,12 @@ Results test_ts_to_local() {
 
     std::time_t ts = 1740369686;
     auto dt = datetimelib::ts_to_local_isodate(ts);
-    spdlog::debug("ts {} local {}", ts, dt);
+    // spdlog::debug("ts {} local {}", ts, dt);
     r.equals(dt == "2025-02-23T20:01:26-0800", "ts to local");
 
     ts = 2840369686;
     dt = datetimelib::ts_to_local_isodate(ts);
-    spdlog::debug("ts {} local {}", ts, dt);
+    // spdlog::debug("ts {} local {}", ts, dt);
     r.equals(dt == "2060-01-03T07:34:46-0800", "future ts to local");
 
     return r;
@@ -65,22 +65,22 @@ Results test_ts_to_utc() {
 
     std::time_t ts = 1740369686;
     auto dt = datetimelib::ts_to_utc_isodate(ts);
-    spdlog::debug("ts {} local {}", ts, dt);
+    // spdlog::debug("ts {} local {}", ts, dt);
     r.equals(dt == "2025-02-24T04:01:26Z", "ts to UTC/zulu");
 
     ts = 2840369686;
     dt = datetimelib::ts_to_utc_isodate(ts);
-    spdlog::debug("ts {} local {}", ts, dt);
+    // spdlog::debug("ts {} local {}", ts, dt);
     r.equals(dt == "2060-01-03T15:34:46Z", "future ts to UTC/zulu");
 
     // test for the Y2038 bug
     ts = 2'147'483'647;  // max 32 bit int
     dt = datetimelib::ts_to_utc_isodate(ts);
-    spdlog::debug("ts {} local {}", ts, dt);
+    // spdlog::debug("ts {} local {}", ts, dt);
     r.equals(dt == "2038-01-19T03:14:07Z", "Y2038 future ts to UTC/zulu");
     ts += 1;  // when it rolls over
     dt = datetimelib::ts_to_utc_isodate(ts);
-    spdlog::debug("ts {} local {}", ts, dt);
+    // spdlog::debug("ts {} local {}", ts, dt);
     r.equals(dt == "2038-01-19T03:14:08Z", "Y2038 future ts to UTC/zulu");
 
     return r;
@@ -96,17 +96,17 @@ Results test_time_t_size() {
 }
 
 int main() {
-    spdlog::set_level(spdlog::level::info);
+    // spdlog::set_level(spdlog::level::info);
 
     const auto vers = datetimelib::VERSION;
-    spdlog::info("{}Starting Unit Tests: Version: {}{}", cyan, vers, reset);
+    // spdlog::info("{}Starting Unit Tests: Version: {}{}", cyan, vers, reset);
 
     Results summary = {.name = "Unit Test Summary"};
 
     // lambda to run a test and add its result to the summary
     auto run_test = [&summary](auto test_func) {
         auto result = test_func();
-        spdlog::info("{}", result.to_string());
+        // spdlog::info("{}", result.to_string());
         summary.add(result);
     };
 
@@ -117,13 +117,13 @@ int main() {
         run_test(test_ts_to_utc);
         run_test(test_wait_for_next_mark);
 
-        spdlog::info("{}", summary.to_string());
+        // spdlog::info("{}", summary.to_string());
         auto msg = (summary.failed == 0) ? green + "Ok" : "\n" + red + "Tests failed!";
-        spdlog::info("Unit Test Results: {}{}{}", cyan, msg, reset);
+        // spdlog::info("Unit Test Results: {}{}{}", cyan, msg, reset);
 
         return summary.failed;
     } catch (const std::exception &e) {
-        spdlog::error("Test failed: {}", e.what());
+        // spdlog::error("Test failed: {}", e.what());
         return 1;
     }
 }
