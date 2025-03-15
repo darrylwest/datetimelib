@@ -73,7 +73,15 @@ namespace datetimelib {
         return result;
     }
 
+    // sleep for the specified milliseconds
+    // NOTE actual sleep will be a few millisconds longer then requested
+    void sleep_millis(int millis) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(millis));
+    }
+
+
     // sleep for the number of seconds; if verbose, then show progress
+    // NOTE actual sleep will be a few millisconds longer then requested
     void sleep_seconds(const int seconds, const bool verbose) {
         if (verbose) {
             std::cout << "countdown: " << std::endl;

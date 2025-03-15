@@ -20,15 +20,15 @@ namespace datetimelib {
     template <typename K, typename V> using HashMap = std::unordered_map<K, V>;
 
     // the lib version
-    constexpr StrView VERSION = "0.6.2-135";
+    constexpr StrView VERSION = "0.6.3-137";
 
     // return the lib's version
     StrView get_version();
 
-    // add wait delay
+    // return the current timepoint
     TimePoint get_current_time();
 
-    // unix timestamp
+    // return the unix timestamp
     std::time_t timestamp_seconds();
 
     // the timestamp in milliseconds
@@ -44,6 +44,9 @@ namespace datetimelib {
     const Str parse_datetime_to_minutes(const Str &datetime);
 
     void sleep_seconds(int seconds, bool verbose = false);
+
+    // sleep the number of milliseconds
+    void sleep_millis(int millis);
 
     // Type alias for a function that provides the current time
     struct MarkProvider {

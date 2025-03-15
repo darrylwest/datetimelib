@@ -42,7 +42,38 @@ Results test_wait_for_next_mark() {
     return r;
 }
 
+Results test_sleep_seconds() {
+    using namespace std::chrono;
+    Results r = {.name = "Sleep seconds"};
+
+    auto t0 = datetimelib::timestamp_millis();
+    datetimelib::sleep_seconds(1);
+    auto t1 = datetimelib::timestamp_millis();
+    auto dur = t1 - t0;
+    if (dur > 1006) {
+        std::print("actual sleep time: {} millis", dur);
+    }
+    r.equals(dur > 999 and dur < 1009, "should slept 1,000 millis");
+
+    return r;
+}
+
+Results test_sleep_millis() {
+    using namespace std::chrono;
+    Results r = {.name = "Sleep seconds"};
+
+    auto t0 = datetimelib::timestamp_millis();
+    datetimelib::sleep_millis(10);
+    auto t1 = datetimelib::timestamp_millis();
+    auto dur = t1 - t0;
+    // std::print("time slept: {}", dur);
+    r.equals(dur >= 10 and dur <= 15, "should have slept 10 millis");
+
+    return r;
+}
+
 Results test_ts_to_local() {
+    // TODO fix this to either set a specific time zone
     Results r = {.name = "Unix ts to Local"};
 
     std::time_t ts = 1740369686;
@@ -112,6 +143,8 @@ int main() {
         run_test(test_ts_to_local);
         run_test(test_ts_to_utc);
         run_test(test_wait_for_next_mark);
+        run_test(test_sleep_seconds);
+        run_test(test_sleep_millis);
         timer.stop();
 
         std::println("{}", summary.to_string());
