@@ -20,7 +20,7 @@ namespace datetimelib {
     template <typename K, typename V> using HashMap = std::unordered_map<K, V>;
 
     // the lib version
-    constexpr StrView VERSION = "0.6.3-137";
+    constexpr StrView VERSION = "0.6.3-138";
 
     // return the lib's version
     StrView get_version();
